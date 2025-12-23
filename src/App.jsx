@@ -18,7 +18,7 @@ const App = () => {
 
   const debouncedSearch = useDebounce(search, 500);
   const apiBaseUrl = process.env.NODE_ENV === 'production' 
-    ? `${window.location.origin}/db.json` 
+    ? `${window.location.origin}/.netlify/functions/products` 
     : "/db.json";
 
   useEffect(() => {
