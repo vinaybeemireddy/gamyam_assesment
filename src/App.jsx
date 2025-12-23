@@ -17,16 +17,16 @@ const App = () => {
   const [page, setPage] = useState(1);
 
   const debouncedSearch = useDebounce(search, 500);
-  const apiBaseUrl ="https://gamyamassessment.netlify.app" //import.meta.env.VITE_API_BASE_URL;
+  const apiBaseUrl = "/db.json"; // Points to public/db.json
 
   useEffect(() => {
     console.log('API Base URL:', apiBaseUrl); // Debug log
     if (!apiBaseUrl) {
-      console.error('VITE_API_BASE_URL is not defined in environment');
+      console.error('db.json path is not defined');
       return;
     }
-    axios.get(`${apiBaseUrl}/products`)
-      .then(res => setProducts(res.data))
+    axios.get(apiBaseUrl)
+      .then(res => setProducts(res.data.products || res.data))
       .catch(err => console.error('Failed to load products', err));
   }, [apiBaseUrl]);
 
@@ -39,14 +39,11 @@ const App = () => {
   const saveProduct = async (product) => {
     try {
       if (product.id) {
-        // update existing product on server
-        const res = await axios.put(`${apiBaseUrl}/products/${product.id}`, product);
-        setProducts(products.map(p => p.id === product.id ? res.data : p));
+        setProducts(products.map(p => p.id === product.id ? product : p));
         alert('Product updated successfully');
       } else {
-        // create new product on server
-        const res = await axios.post(`${apiBaseUrl}/products`, product);
-        setProducts(prev => [...prev, res.data]);
+        const newProduct = { ...product, id: Date.now() };
+        setProducts(prev => [...prev, newProduct]);
         alert('Product added successfully');
       }
       setEditProduct(null);
