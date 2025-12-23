@@ -17,7 +17,9 @@ const App = () => {
   const [page, setPage] = useState(1);
 
   const debouncedSearch = useDebounce(search, 500);
-  const apiBaseUrl = "/db.json"; // Points to public/db.json
+  const apiBaseUrl = process.env.NODE_ENV === 'production' 
+    ? `${window.location.origin}/db.json` 
+    : "/db.json";
 
   useEffect(() => {
     console.log('API Base URL:', apiBaseUrl); // Debug log
