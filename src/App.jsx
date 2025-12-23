@@ -17,12 +17,11 @@ const App = () => {
   const [page, setPage] = useState(1);
 
   const debouncedSearch = useDebounce(search, 500);
-  const apiBaseUrl = process.env.NODE_ENV === 'production' 
-    ? `${window.location.origin}/.netlify/functions/products` 
-    : "/db.json";
+  const apiBaseUrl = "/db.json";
 
+  
   useEffect(() => {
-    console.log('API Base URL:', apiBaseUrl); // Debug log
+    console.log('API Base URL:', apiBaseUrl);
     if (!apiBaseUrl) {
       console.error('db.json path is not defined');
       return;
